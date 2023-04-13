@@ -1,1 +1,2082 @@
-[]
+[
+    {
+        "id": "14ba9c10659f9656",
+        "type": "tab",
+        "label": "Loading and saving data from Arduino UNO",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "ecdab02816480666",
+        "type": "tab",
+        "label": "Mocked up  Arduino data",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "cdfb3fc79ad22428",
+        "type": "tab",
+        "label": "Data processing",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "10462252e269a2d3",
+        "type": "tab",
+        "label": "Sending a request to the server and receiving a response back",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "05ec99b15cd333c3",
+        "type": "tab",
+        "label": "Removing data",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "cb5dd1de306f7cfa",
+        "type": "tab",
+        "label": "Dashboard",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "6b7a48cdf37ecce9",
+        "type": "tab",
+        "label": "Example mongodb4",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "7d296b3d8fad75e4",
+        "type": "mongodb4-client",
+        "name": "my simple connection",
+        "protocol": "mongodb",
+        "hostname": "localhost",
+        "port": "27017",
+        "dbName": "gateway",
+        "authSource": "gateway",
+        "authMechanism": "DEFAULT",
+        "tls": false,
+        "tlsCAFile": "",
+        "tlsInsecure": false,
+        "uri": "",
+        "advanced": "{\"connectTimeoutMS\": 30000}",
+        "uriTabActive": "tab-uri-simple"
+    },
+    {
+        "id": "56664d951c81402c",
+        "type": "serial-port",
+        "serialport": "COM4",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": "10000"
+    },
+    {
+        "id": "f239ae08f42f7c1e",
+        "type": "debug",
+        "z": "14ba9c10659f9656",
+        "name": "debug 2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "db8251f24af3f374",
+        "type": "function",
+        "z": "14ba9c10659f9656",
+        "name": "DHT11 Data Transform",
+        "func": "// payload for mongodb4 node\nconst m = msg.payload.split(',');\nlet H = parseFloat(m[0]);\nlet T = parseFloat(m[1]);\nlet date = new Date();\ndate = date.toISOString();\nconst doc = {\n    date: date,\n    temperature: T,\n    humidity: H,\n    state: \"initial\",   \n    _msgid: msg._msgid\n}\nmsg.payload = doc;\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 60,
+        "wires": [
+            [
+                "9be90bb31ef76723"
+            ]
+        ]
+    },
+    {
+        "id": "47ce780b05f34f7d",
+        "type": "serial in",
+        "z": "14ba9c10659f9656",
+        "name": "Arduino1",
+        "serial": "56664d951c81402c",
+        "x": 100,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9be90bb31ef76723",
+        "type": "mongodb4",
+        "z": "14ba9c10659f9656",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "arduinoMeasurement",
+        "operation": "insertOne",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "insert arduinoM",
+        "x": 580,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6094a3fdc50250c5",
+        "type": "catch",
+        "z": "14ba9c10659f9656",
+        "name": "",
+        "scope": null,
+        "uncaught": false,
+        "x": 120,
+        "y": 300,
+        "wires": [
+            [
+                "3f65706da6b3342e"
+            ]
+        ]
+    },
+    {
+        "id": "3f65706da6b3342e",
+        "type": "debug",
+        "z": "14ba9c10659f9656",
+        "name": "debug 18",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 320,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "8187bd9133196272",
+        "type": "mongodb4",
+        "z": "ecdab02816480666",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "arduinoMeasurement",
+        "operation": "insertOne",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "insert arduinoM",
+        "x": 640,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a564489a756b8fdb",
+        "type": "inject",
+        "z": "ecdab02816480666",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "3",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 250,
+        "y": 60,
+        "wires": [
+            [
+                "e7ca9d120b6f317e"
+            ]
+        ]
+    },
+    {
+        "id": "e7ca9d120b6f317e",
+        "type": "function",
+        "z": "ecdab02816480666",
+        "name": "Mocked data",
+        "func": "// payload for mongodb4 node\n\nfunction generateRandom(min = 0, max = 100) {\n    let difference = max - min;\n    let rand = Math.random();\n    rand = Math.floor(rand * difference);\n    rand = rand + min;\n\n    return rand;\n}\n\nlet H = generateRandom(50, 60);\nlet T = generateRandom(24, 26);\nlet date = new Date();\ndate = date.toISOString();\nconst doc = {\n    state: \"initial\",\n    _msgid: msg._msgid,\n    date: date,\n    temperature: T,\n    humidity: H\n}\nmsg.payload = doc;\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 60,
+        "wires": [
+            [
+                "8187bd9133196272"
+            ]
+        ]
+    },
+    {
+        "id": "a0a4b098287b8c82",
+        "type": "debug",
+        "z": "ecdab02816480666",
+        "name": "debug 11",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "27e23387ccd09473",
+        "type": "catch",
+        "z": "ecdab02816480666",
+        "name": "",
+        "scope": null,
+        "uncaught": false,
+        "x": 240,
+        "y": 260,
+        "wires": [
+            [
+                "30c2852fa3636cc6"
+            ]
+        ]
+    },
+    {
+        "id": "30c2852fa3636cc6",
+        "type": "debug",
+        "z": "ecdab02816480666",
+        "name": "debug 19",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 440,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "7628efeabad653b4",
+        "type": "inject",
+        "z": "cdfb3fc79ad22428",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "180",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "181",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 90,
+        "y": 40,
+        "wires": [
+            [
+                "d211924311a5b8b0"
+            ]
+        ]
+    },
+    {
+        "id": "2352870dd986de36",
+        "type": "debug",
+        "z": "cdfb3fc79ad22428",
+        "name": "debug 3",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "d211924311a5b8b0",
+        "type": "function",
+        "z": "cdfb3fc79ad22428",
+        "name": "set aggregation",
+        "func": "\n// aggregation pipeline\nconst pipeline = [\n{\n    $sort: { date: 1 }\n}, \n\n{ \n    $match: { state: \"initial\" } \n},\n \n// {\n//     $limit: 100\n// },\n\n{\n    $group:\n    {\n        _id: \"$state\",\n        temperatureAvg: { $avg: \"$temperature\" },\n        humidityAvg: { $avg: \"$humidity\" }\n    }\n},\n];\n\n// payload for mongodb4 node\nmsg.payload = [pipeline];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 260,
+        "y": 40,
+        "wires": [
+            [
+                "e2f71ec33f77d9ca"
+            ]
+        ]
+    },
+    {
+        "id": "7150abe69b354174",
+        "type": "split",
+        "z": "cdfb3fc79ad22428",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 550,
+        "y": 40,
+        "wires": [
+            [
+                "9fe7e870433f316f"
+            ]
+        ]
+    },
+    {
+        "id": "9fe7e870433f316f",
+        "type": "change",
+        "z": "cdfb3fc79ad22428",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "parts",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "payload._id",
+                "pt": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload.state",
+                "pt": "msg",
+                "to": "initial",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.timestamp",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 720,
+        "y": 40,
+        "wires": [
+            [
+                "efa0d0d51c54115f"
+            ]
+        ]
+    },
+    {
+        "id": "b5f09d12ea76ee93",
+        "type": "function",
+        "z": "cdfb3fc79ad22428",
+        "name": "set updateMany",
+        "func": "// find query argument\nconst query = {\n    state: \"initial\",\n};\n\nconst update = {\n    $set: { \n        state: \"isProcessed\",\n        _msgid: msg._msgid }\n};\n\nconst options = {\n    sort: { date: 1 },\n    limit: 100\n    };\n\n// payload for mongodb4 node\nmsg.payload = [query, update, options];\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\nlet initial = \"initial\";\nlet isProcessed = \"isProcessed\";",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 200,
+        "wires": [
+            [
+                "55133a790f409de9"
+            ]
+        ]
+    },
+    {
+        "id": "efa0d0d51c54115f",
+        "type": "function",
+        "z": "cdfb3fc79ad22428",
+        "name": "set insertOne",
+        "func": "// payload for mongodb4 node\nlet date = new Date();\n\nconst doc = {\n    state: msg.payload.state,\n    _msgid: msg._msgid,\n    temperature: Math.round(msg.payload.temperatureAvg),\n    humidity: Math.round(msg.payload.humidityAvg), \n    date: date.toISOString(), \n}\nmsg.payload = doc;\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 130,
+        "y": 120,
+        "wires": [
+            [
+                "22ce6b4c61fba8aa",
+                "b5f09d12ea76ee93"
+            ]
+        ]
+    },
+    {
+        "id": "634e49682c0486d6",
+        "type": "inject",
+        "z": "cdfb3fc79ad22428",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "180",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 600,
+        "wires": [
+            [
+                "724356f0c9ef283a"
+            ]
+        ]
+    },
+    {
+        "id": "2fba6d862a053561",
+        "type": "debug",
+        "z": "cdfb3fc79ad22428",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "4c654f714660e722",
+        "type": "debug",
+        "z": "cdfb3fc79ad22428",
+        "name": "debug 7",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "33d326db81201bb6",
+        "type": "function",
+        "z": "cdfb3fc79ad22428",
+        "name": "set update many",
+        "func": "// find query argument\nconst query = {\n    state: \"isSentToCloud\",\n    _msgid: \"accfb33e94eb148e\"\n};\n\nconst update = {\n    $set: { \n        state: \"beDeleted\"\n        }\n};\n\n// payload for mongodb4 node\nmsg.payload = [query, update];\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 270,
+        "y": 740,
+        "wires": [
+            [
+                "ff3b3954dae73ffa"
+            ]
+        ]
+    },
+    {
+        "id": "e2f71ec33f77d9ca",
+        "type": "mongodb4",
+        "z": "cdfb3fc79ad22428",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "arduinoMeasurement",
+        "operation": "aggregate",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "aggregate",
+        "x": 420,
+        "y": 40,
+        "wires": [
+            [
+                "7150abe69b354174"
+            ]
+        ]
+    },
+    {
+        "id": "55133a790f409de9",
+        "type": "mongodb4",
+        "z": "cdfb3fc79ad22428",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "arduinoMeasurement",
+        "operation": "updateMany",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "update arduinoM's",
+        "x": 550,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "22ce6b4c61fba8aa",
+        "type": "mongodb4",
+        "z": "cdfb3fc79ad22428",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "gwMeasurement",
+        "operation": "insertOne",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "insert gwM",
+        "x": 310,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f298e5fa3764073d",
+        "type": "mongodb4",
+        "z": "cdfb3fc79ad22428",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "arduinoMeasurement",
+        "operation": "updateMany",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "update arduinoM's",
+        "x": 510,
+        "y": 640,
+        "wires": [
+            [
+                "4c654f714660e722"
+            ]
+        ]
+    },
+    {
+        "id": "ff3b3954dae73ffa",
+        "type": "mongodb4",
+        "z": "cdfb3fc79ad22428",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "gwMeasurement",
+        "operation": "updateMany",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "update gwM",
+        "x": 490,
+        "y": 700,
+        "wires": [
+            [
+                "ddadb2ccb60bc4b6"
+            ]
+        ]
+    },
+    {
+        "id": "ddadb2ccb60bc4b6",
+        "type": "function",
+        "z": "cdfb3fc79ad22428",
+        "name": "function 1",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 820,
+        "wires": [
+            [
+                "2fba6d862a053561"
+            ]
+        ]
+    },
+    {
+        "id": "724356f0c9ef283a",
+        "type": "function",
+        "z": "cdfb3fc79ad22428",
+        "name": "set update many",
+        "func": "// find query argument\nconst query = {\n    state: \"isProcessed\",\n    //_msgid: \"accfb33e94eb148e\"\n};\n\nconst update = {\n    $set: { \n        state: \"initial\"\n        }\n};\n\n// const options = {\n//     sort: { date: 1 },\n//     limit: 100\n//     };\n\n// payload for mongodb4 node\nmsg.payload = [query, update];\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\nlet initial = \"initial\";\nlet isProcessed = \"isProcessed\";",
+        "finalize": "",
+        "libs": [],
+        "x": 270,
+        "y": 680,
+        "wires": [
+            [
+                "f298e5fa3764073d"
+            ]
+        ]
+    },
+    {
+        "id": "7150a3606fa5c0da",
+        "type": "catch",
+        "z": "cdfb3fc79ad22428",
+        "name": "",
+        "scope": null,
+        "uncaught": false,
+        "x": 120,
+        "y": 400,
+        "wires": [
+            [
+                "4ce49723c4564d42"
+            ]
+        ]
+    },
+    {
+        "id": "4ce49723c4564d42",
+        "type": "debug",
+        "z": "cdfb3fc79ad22428",
+        "name": "debug 20",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 320,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "60d12f1535c65aef",
+        "type": "http request",
+        "z": "10462252e269a2d3",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://localhost:8080/km-weatherstation-maing01/22222222222222222222222222222222/measurement/create",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 370,
+        "y": 160,
+        "wires": [
+            [
+                "c4d134994c094f9d",
+                "c1b356774d7f4f0c",
+                "f4ef6982ced6b1a0"
+            ]
+        ]
+    },
+    {
+        "id": "ebea6a677de54cb6",
+        "type": "debug",
+        "z": "10462252e269a2d3",
+        "name": "debug 13",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "015afdb4bc53d238",
+        "type": "mongodb4",
+        "z": "10462252e269a2d3",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "gwMeasurement",
+        "operation": "findOne",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "",
+        "x": 500,
+        "y": 40,
+        "wires": [
+            [
+                "d1b45695dcf4c546",
+                "ebea6a677de54cb6"
+            ]
+        ]
+    },
+    {
+        "id": "7109fad050853a65",
+        "type": "inject",
+        "z": "10462252e269a2d3",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "300",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "182",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 40,
+        "wires": [
+            [
+                "8724611d4936a2f1"
+            ]
+        ]
+    },
+    {
+        "id": "8724611d4936a2f1",
+        "type": "function",
+        "z": "10462252e269a2d3",
+        "name": "set find one",
+        "func": "msg.payload = [\n    {state: 'initial'}, \n    // {fields: \n    //      {temperature: 1, \n    //       state: 1}\n    // }\n];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 40,
+        "wires": [
+            [
+                "015afdb4bc53d238"
+            ]
+        ]
+    },
+    {
+        "id": "d1b45695dcf4c546",
+        "type": "json",
+        "z": "10462252e269a2d3",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 170,
+        "y": 120,
+        "wires": [
+            [
+                "60d12f1535c65aef"
+            ]
+        ]
+    },
+    {
+        "id": "f4ef6982ced6b1a0",
+        "type": "debug",
+        "z": "10462252e269a2d3",
+        "name": "debug 14",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "6fd73fa84d9a0417",
+        "type": "debug",
+        "z": "10462252e269a2d3",
+        "name": "debug 15",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "3168ed7c4baf5121",
+        "type": "debug",
+        "z": "10462252e269a2d3",
+        "name": "debug 16",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "c1b356774d7f4f0c",
+        "type": "function",
+        "z": "10462252e269a2d3",
+        "name": "set update many",
+        "func": "// find query argument\nconst query = {\n    state: \"initial\",\n    _msgid: msg.payload.beDeleted\n};\n\nconst update = {\n    $set: { \n        state: \"beDeleted\"\n        }\n};\n\n// payload for mongodb4 node\nmsg.payload = [query, update];\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 400,
+        "wires": [
+            [
+                "bb222994b546a740"
+            ]
+        ]
+    },
+    {
+        "id": "6d0c6f293a3ebc77",
+        "type": "mongodb4",
+        "z": "10462252e269a2d3",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "arduinoMeasurement",
+        "operation": "updateMany",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "update arduinoM's",
+        "x": 650,
+        "y": 300,
+        "wires": [
+            [
+                "3168ed7c4baf5121"
+            ]
+        ]
+    },
+    {
+        "id": "bb222994b546a740",
+        "type": "mongodb4",
+        "z": "10462252e269a2d3",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "gwMeasurement",
+        "operation": "updateMany",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "update gwM",
+        "x": 630,
+        "y": 360,
+        "wires": [
+            [
+                "6fd73fa84d9a0417"
+            ]
+        ]
+    },
+    {
+        "id": "c4d134994c094f9d",
+        "type": "function",
+        "z": "10462252e269a2d3",
+        "name": "set update many",
+        "func": "// find query argument\nconst query = {\n    state: \"isProcessed\",\n    _msgid: msg.payload.beDeleted\n};\n\nconst update = {\n    $set: { \n        state: \"beDeleted\"\n        }\n};\n\n// payload for mongodb4 node\nmsg.payload = [query, update];\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\nlet initial = \"initial\";\nlet isProcessed = \"isProcessed\";",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 340,
+        "wires": [
+            [
+                "6d0c6f293a3ebc77"
+            ]
+        ]
+    },
+    {
+        "id": "be671a29111f1f63",
+        "type": "catch",
+        "z": "10462252e269a2d3",
+        "name": "",
+        "scope": null,
+        "uncaught": false,
+        "x": 140,
+        "y": 480,
+        "wires": [
+            [
+                "ec6ee629c16dbe6a"
+            ]
+        ]
+    },
+    {
+        "id": "ec6ee629c16dbe6a",
+        "type": "debug",
+        "z": "10462252e269a2d3",
+        "name": "debug 17",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 340,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "a24d3b05223fae97",
+        "type": "inject",
+        "z": "05ec99b15cd333c3",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "300",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "300",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 100,
+        "wires": [
+            [
+                "c37c48ee7658c04d"
+            ]
+        ]
+    },
+    {
+        "id": "c37c48ee7658c04d",
+        "type": "function",
+        "z": "05ec99b15cd333c3",
+        "name": "deleteMany",
+        "func": "msg.payload = [{ state: \"beDeleted\" }];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 100,
+        "wires": [
+            [
+                "721b5ee308f3f427",
+                "794611ea9aa45495"
+            ]
+        ]
+    },
+    {
+        "id": "272a6ebd8bd484fe",
+        "type": "inject",
+        "z": "05ec99b15cd333c3",
+        "name": "delete all documents in all collections",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 260,
+        "wires": [
+            [
+                "e6ef6bf71cf95cb9"
+            ]
+        ]
+    },
+    {
+        "id": "721b5ee308f3f427",
+        "type": "mongodb4",
+        "z": "05ec99b15cd333c3",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "gwMeasurement",
+        "operation": "deleteMany",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "delete gwMeasurement",
+        "x": 660,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "794611ea9aa45495",
+        "type": "mongodb4",
+        "z": "05ec99b15cd333c3",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "arduinoMeasurement",
+        "operation": "deleteMany",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "delete arduinoMeasurement",
+        "x": 670,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d32656de6683a433",
+        "type": "mongodb4",
+        "z": "05ec99b15cd333c3",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "arduinoMeasurement",
+        "operation": "deleteMany",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "delete all documents",
+        "x": 540,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a548b5e46a3a9d7d",
+        "type": "debug",
+        "z": "05ec99b15cd333c3",
+        "name": "debug 9",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "e6ef6bf71cf95cb9",
+        "type": "function",
+        "z": "05ec99b15cd333c3",
+        "name": "set delete many",
+        "func": "msg.payload = [{}];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 240,
+        "y": 360,
+        "wires": [
+            [
+                "d32656de6683a433",
+                "5bfb881a601736f4"
+            ]
+        ]
+    },
+    {
+        "id": "5bfb881a601736f4",
+        "type": "mongodb4",
+        "z": "05ec99b15cd333c3",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "gwMeasurement",
+        "operation": "deleteMany",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "delete all documents",
+        "x": 540,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "601ee100179b97b5",
+        "type": "catch",
+        "z": "05ec99b15cd333c3",
+        "name": "",
+        "scope": null,
+        "uncaught": false,
+        "x": 80,
+        "y": 500,
+        "wires": [
+            [
+                "7536bb19aac0332a"
+            ]
+        ]
+    },
+    {
+        "id": "7536bb19aac0332a",
+        "type": "debug",
+        "z": "05ec99b15cd333c3",
+        "name": "debug 21",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 280,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "fe36b4aab8e4b51e",
+        "type": "inject",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "0",
+        "topic": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 80,
+        "wires": [
+            [
+                "02df4cd3db727bea"
+            ]
+        ]
+    },
+    {
+        "id": "02df4cd3db727bea",
+        "type": "function",
+        "z": "6b7a48cdf37ecce9",
+        "name": "set payload",
+        "func": "msg.payload = [{name: 'marina', age: 22}];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 80,
+        "wires": [
+            [
+                "fbdbc88728b6bb53"
+            ]
+        ]
+    },
+    {
+        "id": "fbdbc88728b6bb53",
+        "type": "mongodb4",
+        "z": "6b7a48cdf37ecce9",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "gwMeasurement",
+        "operation": "insertOne",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "",
+        "x": 480,
+        "y": 80,
+        "wires": [
+            [
+                "ad6bea22c0e0b689"
+            ]
+        ]
+    },
+    {
+        "id": "ad6bea22c0e0b689",
+        "type": "debug",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "8ee269b8753b02a1",
+        "type": "inject",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 140,
+        "wires": [
+            [
+                "b3879290c479d05d"
+            ]
+        ]
+    },
+    {
+        "id": "b3879290c479d05d",
+        "type": "function",
+        "z": "6b7a48cdf37ecce9",
+        "name": "set payload",
+        "func": "msg.payload = [[\n    {name: 'chris', age: 22},\n    {name: 'markus', age: 22}\n]];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 140,
+        "wires": [
+            [
+                "f5c11e1900707b1c"
+            ]
+        ]
+    },
+    {
+        "id": "f5c11e1900707b1c",
+        "type": "mongodb4",
+        "z": "6b7a48cdf37ecce9",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "gwMeasurement",
+        "operation": "insertMany",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "",
+        "x": 490,
+        "y": 140,
+        "wires": [
+            [
+                "7a265f43dea48889"
+            ]
+        ]
+    },
+    {
+        "id": "7a265f43dea48889",
+        "type": "debug",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "5c8f4bef1a115679",
+        "type": "inject",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 260,
+        "wires": [
+            [
+                "df0db7fed54ff2ef"
+            ]
+        ]
+    },
+    {
+        "id": "df0db7fed54ff2ef",
+        "type": "function",
+        "z": "6b7a48cdf37ecce9",
+        "name": "set payload",
+        "func": "msg.payload = [\n    {state: 'initial'}, \n    // {fields: \n    //      {temperature: 1, \n    //       state: 1}\n    // }\n];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 260,
+        "wires": [
+            [
+                "fb9612f0dabb7e67"
+            ]
+        ]
+    },
+    {
+        "id": "fb9612f0dabb7e67",
+        "type": "mongodb4",
+        "z": "6b7a48cdf37ecce9",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "gwMeasurement",
+        "operation": "findOne",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "",
+        "x": 480,
+        "y": 260,
+        "wires": [
+            [
+                "fc1f0dfb426c9034"
+            ]
+        ]
+    },
+    {
+        "id": "fc1f0dfb426c9034",
+        "type": "debug",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "5b61665e0f5cc0c5",
+        "type": "inject",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 320,
+        "wires": [
+            [
+                "91c84ba4d12fb033"
+            ]
+        ]
+    },
+    {
+        "id": "91c84ba4d12fb033",
+        "type": "function",
+        "z": "6b7a48cdf37ecce9",
+        "name": "set payload",
+        "func": "msg.payload = [{age: 22}];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 320,
+        "wires": [
+            [
+                "daa4aeeeb29120ca"
+            ]
+        ]
+    },
+    {
+        "id": "daa4aeeeb29120ca",
+        "type": "mongodb4",
+        "z": "6b7a48cdf37ecce9",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "gwMeasurement",
+        "operation": "find",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "find.toArray",
+        "x": 490,
+        "y": 320,
+        "wires": [
+            [
+                "39ce7da42ba01b32"
+            ]
+        ]
+    },
+    {
+        "id": "39ce7da42ba01b32",
+        "type": "debug",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "1075d26bfd292f92",
+        "type": "inject",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 380,
+        "wires": [
+            [
+                "f83a21e14acc6837"
+            ]
+        ]
+    },
+    {
+        "id": "f83a21e14acc6837",
+        "type": "function",
+        "z": "6b7a48cdf37ecce9",
+        "name": "set payload",
+        "func": "msg.payload = [{age: 22}];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 380,
+        "wires": [
+            [
+                "0d76106c415ab9bc"
+            ]
+        ]
+    },
+    {
+        "id": "0d76106c415ab9bc",
+        "type": "mongodb4",
+        "z": "6b7a48cdf37ecce9",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "gwMeasurement",
+        "operation": "find",
+        "output": "forEach",
+        "handleDocId": false,
+        "name": "find.forEach",
+        "x": 490,
+        "y": 380,
+        "wires": [
+            [
+                "6c446d0d50cd33eb"
+            ]
+        ]
+    },
+    {
+        "id": "6c446d0d50cd33eb",
+        "type": "debug",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "e00d5ecdcb458feb",
+        "type": "inject",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 440,
+        "wires": [
+            [
+                "5a7163e6a172dec5"
+            ]
+        ]
+    },
+    {
+        "id": "5a7163e6a172dec5",
+        "type": "function",
+        "z": "6b7a48cdf37ecce9",
+        "name": "set payload",
+        "func": "msg.payload = [{age: 22}];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 440,
+        "wires": [
+            [
+                "eeb034c85f0a357e"
+            ]
+        ]
+    },
+    {
+        "id": "eeb034c85f0a357e",
+        "type": "mongodb4",
+        "z": "6b7a48cdf37ecce9",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "gwMeasurement",
+        "operation": "countDocuments",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "countDocuments",
+        "x": 510,
+        "y": 440,
+        "wires": [
+            [
+                "2f288690a68278bd"
+            ]
+        ]
+    },
+    {
+        "id": "2f288690a68278bd",
+        "type": "debug",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "d5700bd465e13fa5",
+        "type": "inject",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 200,
+        "wires": [
+            [
+                "2581ad0e69bb4b74"
+            ]
+        ]
+    },
+    {
+        "id": "2581ad0e69bb4b74",
+        "type": "function",
+        "z": "6b7a48cdf37ecce9",
+        "name": "set payload",
+        "func": "msg.payload = [{}, {$inc: {age: 1}, $set: {aged: true}}];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 200,
+        "wires": [
+            [
+                "ec5005a3a476c75b"
+            ]
+        ]
+    },
+    {
+        "id": "ec5005a3a476c75b",
+        "type": "mongodb4",
+        "z": "6b7a48cdf37ecce9",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "gwMeasurement",
+        "operation": "updateMany",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "",
+        "x": 490,
+        "y": 200,
+        "wires": [
+            [
+                "513e182443df307e"
+            ]
+        ]
+    },
+    {
+        "id": "513e182443df307e",
+        "type": "debug",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "1dac7a6a0bc94b9b",
+        "type": "inject",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 500,
+        "wires": [
+            [
+                "3fca5aea8063c42f"
+            ]
+        ]
+    },
+    {
+        "id": "3fca5aea8063c42f",
+        "type": "function",
+        "z": "6b7a48cdf37ecce9",
+        "name": "with doc _id",
+        "func": "// query a document id with string, \n// the operation node will handle this\nmsg.payload = [{_id: \"6333409294471deda67da815\"}];\n\n// operation node will substitute, if valid id string\n// msg.payload = [{_id: ObjectId(\"6333409294471deda67da815\")}]\n\n// THIS EXAMPLE WILL ONLY WORK IF YOU HAVE A DOCUMENT WITH THIS ID IN YOUR DATA SET :-)\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 500,
+        "wires": [
+            [
+                "0179da6221e5f29c"
+            ]
+        ]
+    },
+    {
+        "id": "0179da6221e5f29c",
+        "type": "mongodb4",
+        "z": "6b7a48cdf37ecce9",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "gwMeasurement",
+        "operation": "findOne",
+        "output": "toArray",
+        "handleDocId": true,
+        "name": "findOne",
+        "x": 480,
+        "y": 500,
+        "wires": [
+            [
+                "1cc86e86236b50da"
+            ]
+        ]
+    },
+    {
+        "id": "1cc86e86236b50da",
+        "type": "debug",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "0f1419fe40a054a4",
+        "type": "inject",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 560,
+        "wires": [
+            [
+                "103caed91230c198"
+            ]
+        ]
+    },
+    {
+        "id": "103caed91230c198",
+        "type": "function",
+        "z": "6b7a48cdf37ecce9",
+        "name": "set payload",
+        "func": "//msg.payload = [{age: {$gt: 25}}];\nmsg.payload = [{}];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 560,
+        "wires": [
+            [
+                "3b5f6cbbc8585516"
+            ]
+        ]
+    },
+    {
+        "id": "3b5f6cbbc8585516",
+        "type": "mongodb4",
+        "z": "6b7a48cdf37ecce9",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "gwMeasurement",
+        "operation": "deleteMany",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "",
+        "x": 490,
+        "y": 560,
+        "wires": [
+            [
+                "d69cf47b58e754d7"
+            ]
+        ]
+    },
+    {
+        "id": "d69cf47b58e754d7",
+        "type": "debug",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "d72c3423667d2fe7",
+        "type": "inject",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 680,
+        "wires": [
+            [
+                "4fbc5c911d465894"
+            ]
+        ]
+    },
+    {
+        "id": "4fbc5c911d465894",
+        "type": "mongodb4",
+        "z": "6b7a48cdf37ecce9",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "db",
+        "collection": "gwMeasurement",
+        "operation": "stats",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "db stats",
+        "x": 480,
+        "y": 680,
+        "wires": [
+            [
+                "53eb06efe65bcfc4"
+            ]
+        ]
+    },
+    {
+        "id": "53eb06efe65bcfc4",
+        "type": "debug",
+        "z": "6b7a48cdf37ecce9",
+        "name": "payload",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "4efb71ded2d8a294",
+        "type": "inject",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 620,
+        "wires": [
+            [
+                "f345242e576f8361"
+            ]
+        ]
+    },
+    {
+        "id": "f345242e576f8361",
+        "type": "function",
+        "z": "6b7a48cdf37ecce9",
+        "name": "distinct age",
+        "func": "msg.payload = [\"age\"];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 620,
+        "wires": [
+            [
+                "9960080cec50e212"
+            ]
+        ]
+    },
+    {
+        "id": "9960080cec50e212",
+        "type": "mongodb4",
+        "z": "6b7a48cdf37ecce9",
+        "clientNode": "7d296b3d8fad75e4",
+        "mode": "collection",
+        "collection": "gwMeasurement",
+        "operation": "distinct",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "",
+        "x": 480,
+        "y": 620,
+        "wires": [
+            [
+                "df8bfd9233fa703a"
+            ]
+        ]
+    },
+    {
+        "id": "df8bfd9233fa703a",
+        "type": "debug",
+        "z": "6b7a48cdf37ecce9",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 620,
+        "wires": []
+    }
+]
